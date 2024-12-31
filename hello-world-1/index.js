@@ -1,20 +1,21 @@
-import { http } from "@google-cloud/functions-framework";
+const functions = require("@google-cloud/functions-framework");
 
-http("BChandler", (event) => {
-  let order = JSON.parse(event.body);
+functions.http("BChandler", (req, res) => {
+  let order = req.body;
   console.log("🚀 ~ file: index.js:5 ~ http ~ order:", order);
 
-  if (order.scope == "store/order/statusUpdated") {
+  if (
+    typeof order.scope !== "undefined" &&
+    order.scope == "store/order/statusUpdated"
+  ) {
     console.log(
       `*~*~*~*~*~*Order ${order.data.id} is heading from BC to Monday!*~*~*~*~*~*`
     );
-    return orderUpdated(order);
+    res.send("OK");
+    //return orderUpdated(order);
   } else {
     // res.status(200).send();
     // console.log(order.scope);
-    return {
-      statusCode: 200,
-      body: JSON.stringify(event),
-    };
+    res.status(200).send("OK");
   }
 });
