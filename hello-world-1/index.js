@@ -1,7 +1,20 @@
-const functions = require("@google-cloud/functions-framework");
+import { http } from "@google-cloud/functions-framework";
 
-// Register an HTTP function with the Functions Framework that will be executed
-// when you make an HTTP request to the deployed function's endpoint.
-functions.http("helloGET", (req, res) => {
-  res.send("Hello World!");
+http("BChandler", (event) => {
+  let order = JSON.parse(event.body);
+  console.log("🚀 ~ file: index.js:5 ~ http ~ order:", order);
+
+  if (order.scope == "store/order/statusUpdated") {
+    console.log(
+      `*~*~*~*~*~*Order ${order.data.id} is heading from BC to Monday!*~*~*~*~*~*`
+    );
+    return orderUpdated(order);
+  } else {
+    // res.status(200).send();
+    // console.log(order.scope);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(event),
+    };
+  }
 });
