@@ -1,7 +1,10 @@
 const functions = require("@google-cloud/functions-framework");
 
 functions.http("BChandler", (event) => {
-  let order = event.body;
+  const pubSubMessage = event.body.message;
+  const order = pubSubMessage.data
+    ? Buffer.from(pubSubMessage.data, "base64").toString().trim()
+    : "World";
   console.log("🚀 ~ file: index.js:5 ~ http ~ order:", order);
 
   if (order.scope == "store/order/statusUpdated") {
