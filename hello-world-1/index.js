@@ -1,6 +1,6 @@
-const functions = require("@google-cloud/functions-framework");
+import { http } from "@google-cloud/functions-framework";
 
-functions.http("BChandler", (event) => {
+http("BChandler", (event) => {
   const pubSubMessage = event.body.message;
   const order = pubSubMessage.data
     ? Buffer.from(pubSubMessage.data, "base64").toString().trim()
